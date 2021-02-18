@@ -1,0 +1,61 @@
+version: "3"
+
+services:
+  tfcd_web:
+    container_name: tfcd_web
+    image: test_flask_celery_docker
+    ports:
+      - 5000:5000
+    depends_on:
+      - tfcd_rabbit
+    volumes:
+      - .:/app
+    networks:
+      - tfcd
+
+  tfcd_rabbit:
+    container_name: tfcd_rabbit
+    hostname: tfcd_rabbit
+    image: rabbitmq:3.8.11-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 5673:5672
+      - 15672:15672
+    networks:
+      - tfcd
+
+  tfcd_worker_a:
+    container_name: tfcd_worker_a
+    hostname: tfcd_worker_1
+    image: test_flask_celery_docker
+    entrypoint: celery
+    command: -A worker_a worker -l INFO -Q worker_a
+    volumes:
+      - .:/app
+    # links:
+    #   - tfcd_rabbit
+    depends_on:
+      - tfcd_rabbit
+    networks:
+      - tfcd
+
+  tfcd_worker_b:
+    container_name: tfcd_worker_b
+    hostname: tfcd_worker_2
+    image: test_flask_celery_docker
+    entrypoint: celery
+    command: -A worker_b worker -l INFO -Q worker_b
+    volumes:
+      - .:/app
+    # links:
+    #   - tfcd_rabbit
+    depends_on:
+      - tfcd_rabbit
+    networks:
+      - tfcd
+
+networks:
+  tfcd:
+    driver: bridge

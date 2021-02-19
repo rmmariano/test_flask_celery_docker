@@ -5,7 +5,7 @@ CELERY_BROKER_URL = 'amqp://guest:guest@tfcd_rabbit:5672//'
 CELERY_RESULT_BACKEND = 'rpc://'
 
 # Initialize Celery
-celery = Celery('worker_b',  # celery name
+celery = Celery('tfcd.workers.worker_b',  # celery name
                 broker=CELERY_BROKER_URL,
                 backend=CELERY_RESULT_BACKEND)
 
@@ -16,10 +16,7 @@ celery.conf.broker_transport_options = {
     'interval_max': 0.5
 }
 
-# queue name
-# celery.conf.task_routes = {'worker_b.*': {'queue': 'worker_b'}}
-
-@celery.task(queue='worker_b', name='tfcd.worker_b.sub_nums')
+@celery.task(queue='worker_b', name='tfcd.workers.worker_b.sub_nums')
 def sub_nums(a, b):
    result = a - b
    print(f'\nsub_nums({a}, {b}): {result}\n')

@@ -4,14 +4,17 @@ services:
   tfcd_web:
     container_name: tfcd_web
     image: test_flask_celery_docker
-    ports:
-      - 5000:5000
-    depends_on:
-      - tfcd_rabbit
+    environment:
+      - FLASK_APP=test_flask_celery_docker/app.py
+      - FLASK_ENV=development
     volumes:
       - .:/app
+    depends_on:
+      - tfcd_rabbit
     networks:
       - tfcd
+    ports:
+      - 5000:5000
 
   tfcd_rabbit:
     container_name: tfcd_rabbit
@@ -33,8 +36,7 @@ services:
     container_name: tfcd_worker_a
     hostname: tfcd_worker_1
     image: test_flask_celery_docker
-    entrypoint: celery
-    command: -A worker_a worker -l INFO -Q worker_a
+    command: celery -A test_flask_celery_docker.workers.worker_a worker -l INFO -Q worker_a
     volumes:
       - .:/app
     links:
@@ -48,8 +50,7 @@ services:
     container_name: tfcd_worker_b
     hostname: tfcd_worker_2
     image: test_flask_celery_docker
-    entrypoint: celery
-    command: -A worker_b worker -l INFO -Q worker_b
+    command: celery -A test_flask_celery_docker.workers.worker_b worker -l INFO -Q worker_b
     volumes:
       - .:/app
     links:

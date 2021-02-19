@@ -1,7 +1,7 @@
-from worker_a import add_nums
-from worker_b import sub_nums
-
 from flask import Flask, request, jsonify
+
+from test_flask_celery_docker.workers.worker_a import add_nums
+from test_flask_celery_docker.workers.worker_b import sub_nums
 
 
 app = Flask(__name__)
@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route("/add")
 def add():
     # curl "localhost:5000/add?first_num=3&second_num=2"
-    print('\nadd()')
+    print('\n\n\nadd()')
 
     first_num = int(request.args.get('first_num'))
     second_num = int(request.args.get('second_num'))
@@ -31,7 +31,7 @@ def add():
 @app.route("/subtract")
 def subtract():
     # curl "localhost:5000/subtract?first_num=3&second_num=2"
-    print('\nsubtract()')
+    print('\n\n\nsubtract()')
 
     first_num = int(request.args.get('first_num'))
     second_num = int(request.args.get('second_num'))

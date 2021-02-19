@@ -5,7 +5,7 @@ CELERY_BROKER_URL = 'amqp://guest:guest@tfcd_rabbit:5672//'
 CELERY_RESULT_BACKEND = 'rpc://'
 
 # Initialize Celery
-celery = Celery('worker_a',  # celery name
+celery = Celery('tfcd.workers.worker_a',  # celery name
                 broker=CELERY_BROKER_URL,
                 backend=CELERY_RESULT_BACKEND)
 
@@ -16,10 +16,7 @@ celery.conf.broker_transport_options = {
     'interval_max': 0.5
 }
 
-# queue name
-# celery.conf.task_routes = {'worker_a.*': {'queue': 'worker_a'}}
-
-@celery.task(queue='worker_a', name='tfcd.worker_a.add_nums')
+@celery.task(queue='worker_a', name='tfcd.workers.worker_a.add_nums')
 def add_nums(a, b):
    result = a + b
    print(f'\nadd_nums({a}, {b}): {result}\n')

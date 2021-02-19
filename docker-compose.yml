@@ -18,10 +18,11 @@ services:
     hostname: tfcd_rabbit
     image: rabbitmq:3.8.11-management
     environment:
+      - RABBITMQ_ERLANG_COOKIE=test
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
     ports:
-      - 5673:5672
+      - 5672:5672
       - 15672:15672
     networks:
       - tfcd
@@ -34,8 +35,8 @@ services:
     command: -A worker_a worker -l INFO -Q worker_a
     volumes:
       - .:/app
-    # links:
-    #   - tfcd_rabbit
+    links:
+      - tfcd_rabbit
     depends_on:
       - tfcd_rabbit
     networks:
@@ -49,8 +50,8 @@ services:
     command: -A worker_b worker -l INFO -Q worker_b
     volumes:
       - .:/app
-    # links:
-    #   - tfcd_rabbit
+    links:
+      - tfcd_rabbit
     depends_on:
       - tfcd_rabbit
     networks:

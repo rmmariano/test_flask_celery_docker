@@ -10,6 +10,14 @@ celery = Celery('worker_b',
                 broker=CELERY_BROKER_URL,
                 backend=CELERY_RESULT_BACKEND)
 
+celery.conf.broker_transport_options = {
+    'max_retries': 3,
+    'interval_start': 0,
+    'interval_step': 0.2,
+    'interval_max': 0.5
+}
+
+
 @celery.task()
 def sub_nums(a, b):
    result = a - b

@@ -23,6 +23,7 @@ def add():
     print('task: ', task)
     print('state: ', task.state)
     print('result: ', task.result)
+    print('backend: ', task.backend)
     print('get(): ', task.get()) # <-- it does not work
 
     return jsonify({'result': task.result}), 200
@@ -43,6 +44,7 @@ def subtract():
     print('task: ', task)
     print('state: ', task.state)
     print('result: ', task.result)
+    print('backend: ', task.backend)
     print('get(): ', task.get())
 
     return jsonify({'result': task.result}), 200

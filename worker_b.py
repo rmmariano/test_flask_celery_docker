@@ -18,7 +18,7 @@ celery.conf.broker_transport_options = {
 }
 
 
-@celery.task()
+@celery.task(queue='worker_b')
 def sub_nums(a, b):
    result = a - b
    print(f'\nsub_nums({a}, {b}): {result}')

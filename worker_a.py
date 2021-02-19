@@ -18,7 +18,7 @@ celery.conf.broker_transport_options = {
 }
 
 
-@celery.task()
+@celery.task(queue='worker_a')
 def add_nums(a, b):
    result = a + b
    print(f'\nadd_nums({a}, {b}): {result}')
